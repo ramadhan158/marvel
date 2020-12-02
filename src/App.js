@@ -6,7 +6,7 @@ const App = () => {
   const ts = '1605539483000';
   const hash = 'fa671960ed91ebe8038f30063c34b4c6';
 
-  const [hero, setHero] = useState();
+  const [hero, setHero] = useState([]);
   const [search, setSearch] = useState("");
   const [query, setQuery] = useState(undefined);
 
@@ -17,9 +17,8 @@ const App = () => {
   const getAPI = async () => {
     const response = await fetch(`https://gateway.marvel.com:443/v1/public/characters?apikey=${apikey}&ts=${ts}&hash=${hash}&name=${query}`)
     const data = await response.json();
-    const result = await data.data.results[0]
+    const result = await data.data.results
     setHero(result)
-    console.log(result)
   }
 
     const updateSearch = (e) => {
@@ -36,8 +35,6 @@ const App = () => {
       setSearch("")
     }
 
-    console.log(hero)
-
     return(
         <div className="App">
             <form onSubmit={getSearch}>
@@ -45,8 +42,11 @@ const App = () => {
                 <button>Cari</button>
             </form>
             <div>
-              <Marvel name="hhh"/>
+                {hero.map(he => (
+                <Marvel name={he.name} des={he.description} />
+                ))}
             </div>
+            
         </div>
     )
 };

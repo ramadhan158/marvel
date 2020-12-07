@@ -15,7 +15,7 @@ const App = () => {
   //comic state
   const [comics, setComics] = useState();
 
-  React.useEffect(() => {
+  useEffect(() => {
     // get hero
     getAPIHero();
   }, [query]);
@@ -34,16 +34,19 @@ const App = () => {
   };
 
   //getting comics
-  // if (hero.length === 1) {
-  //   const getComics = async () => {
-  //     const response = await fetch(
-  //       `https://gateway.marvel.com:443/v1/public/characters/${hero[0].id}/comics?apikey=${apikey}&ts=${ts}&hash=${hash}`
-  //     );
-  //     const data = await response.json();
-  //     const comics = await data.data.results;
-  //     setComics(comics);
-  //   };
-  // }
+  useEffect(() => {
+    if (hero.length > 0) {
+      setComics([]);
+      fetch(
+        `https://gateway.marvel.com:443/v1/public/characters/${hero[0].id}/comics?apikey=${apikey}&ts=${ts}&hash=${hash}`
+      )
+        .then((response) => response.json())
+        .then((result) => {
+          const { results } = result.data;
+          setComics(results);
+        });
+    }
+  }, [hero]);
 
   const updateSearch = (e) => {
     setSearch(e.target.value);
@@ -60,7 +63,7 @@ const App = () => {
   };
 
   // konsol iki lho su, run en lak metu terus console.log e
-  // console.log(comics);
+  console.log(comics);
 
   return (
     <>
